@@ -260,9 +260,3 @@ ggplot(Marriage, aes(x = age)) +
 
 
 
-
-
-
-
-
-
