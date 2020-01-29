@@ -289,11 +289,121 @@ ggplot(mpg, aes(x = class, fill = drv)) +
   geom_bar(position = "fill") + 
   labs(y = "Proportion")
 
-#------------------------
-# Segmented bar chart   |
-#------------------------
+#-------------------------------------
+# Improving the color and labeling   |
+#-------------------------------------
+# bar plot, with each bar representing 100% reordered bars, and better labels and colors 
+ggplot(mpg, aes(x = factor(class, levels = c("2seater", "subcompact", "compact", "midsize", "minivan", "suv", "pickup"))
+                                , fill = factor(drv, levels = c("f", "r", "4")
+                                , labels = c("front-wheel", "rear-wheel", "4-wheel")))) + 
+  geom_bar(position = "fill") + 
+  scale_y_continuous(breaks = seq(0, 1, .2), label = percent) + 
+  scale_fill_brewer(palette = "Set2") + 
+  labs(y = "Percent", fill = "Drive Train", x = "Class", title = "Automobile Drive by Class") + 
+  theme_minimal()
+
+# create a summary dataset
+plotdata <- mpg %>% 
+            group_by(class, drv) %>% 
+            summarize(n = n()) %>% 
+            mutate(pct = n/sum(n), lbl = scales::percent(pct))
+
+# create segmented bar chart # adding labels to each segment
+ggplot(plotdata, aes(x = factor(class
+                                ,levels = c("2seater", "subcompact", "compact", "midsize", "minivan", "suv", "pickup"))
+                                ,y = pct
+                                ,fill = factor(drv, levels = c("f", "r", "4")
+                                ,labels = c("front-wheel", "rear-wheel", "4-wheel")))) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  scale_y_continuous(breaks = seq(0, 1, .2), label = percent) + 
+  geom_text(aes(label = lbl), size = 3, position = position_stack(vjust = 0.5)) + 
+  scale_fill_brewer(palette = "Set2") + 
+  labs(y = "Percent", fill = "Drive Train", x = "Class", title = "Automobile Drive by Class") + 
+  theme_minimal()
+
+#---------------------------------
+# Categorical vs. Quantitative   |
+#---------------------------------
+
+data(Salaries, package="carData")
+
+plotdata <- Salaries %>% group_by(rank) %>% summarize(mean_salary = mean(salary))
+
+# plot mean salaries 
+ggplot(plotdata, aes(x = rank, y = mean_salary)) + geom_bar(stat = "identity")
+
+# plot mean salaries in a more attractive fashion
+ggplot(plotdata, aes(x = factor(rank
+                                ,labels = c("Assistant\nProfessor", "Associate\nProfessor", "Full\nProfessor"))
+                                ,y = mean_salary)) + 
+  geom_bar(stat = "identity", fill = "cornflowerblue") + 
+  geom_text(aes(label = dollar(mean_salary)), vjust = -0.25) + 
+  scale_y_continuous(breaks = seq(0, 130000, 20000), label = dollar) +
+  labs(title = "Mean Salary by Rank", subtitle = "9-month academic salary for 2008-2009", x = "", y = "")
+  
+#---------------------------------
+# Grouped kernel density plots   |
+#---------------------------------
+# plot the distribution of salaries by rank using kernel density plots 
+ggplot(Salaries, aes(x = salary, fill = rank)) + 
+  geom_density(alpha = 0.4) + 
+  labs(title = "Salary distribution by rank")
+
+#-------------
+# Box plots  |
+#-------------
+# plot the distribution of salaries by rank using boxplots 
+ggplot(Salaries, aes(x = rank, y = salary)) + 
+  geom_boxplot() + 
+  labs(title = "Salary distribution by rank")
+
+# plot the distribution of salaries by rank using boxplots 
+ggplot(Salaries, aes(x = rank, y = salary)) + 
+  geom_boxplot(notch = TRUE, fill = "cornflowerblue", alpha = .7) + 
+  labs(title = "Salary distribution by rank")
+
+#----------------
+# Violin plots  |
+#----------------
+# plot the distribution of salaries by rank using violin plots 
+ggplot(Salaries, aes(x = rank, y = salary)) + 
+  geom_violin() + 
+  labs(title = "Salary distribution by rank")
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
 
 
