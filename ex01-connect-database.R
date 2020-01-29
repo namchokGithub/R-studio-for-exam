@@ -14,7 +14,9 @@ con = dbConnect(MySQL(),
                 host="10.80.39.17")
 
 dataFormDB <- dbGetQuery(con, "SELECT * FROM oes_result_exam")
-dataFormDB
+
+View(dataFormDB)
+
 dbDisconnect(con)
 
 #------------ Connect database -------------------#

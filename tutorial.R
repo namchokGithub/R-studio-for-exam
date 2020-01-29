@@ -260,3 +260,40 @@ ggplot(Marriage, aes(x = age)) +
 
 
 
+
+#####################
+# Bivariate  Graphs #
+#####################
+
+#------------------------
+# Stacked bar chart     |
+#------------------------
+
+# stacked bar chart 
+ggplot(mpg, aes(x = class, fill = drv)) + 
+  geom_bar(position = "stack")
+
+#------------------------
+# Grouped bar chart     |
+#------------------------
+# grouped bar plot 
+ggplot(mpg, aes(x = class, fill = drv)) + 
+  geom_bar(position = "dodge")
+
+#------------------------
+# Segmented bar chart   |
+#------------------------
+
+# bar plot, with each bar representing 100% 
+ggplot(mpg, aes(x = class, fill = drv)) + 
+  geom_bar(position = "fill") + 
+  labs(y = "Proportion")
+
+#------------------------
+# Segmented bar chart   |
+#------------------------
+
+
+
+
+
