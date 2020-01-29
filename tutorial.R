@@ -247,20 +247,6 @@ ggplot(Marriage, aes(x = age)) +
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #####################
 # Bivariate  Graphs #
 #####################
@@ -369,6 +355,32 @@ ggplot(Salaries, aes(x = rank, y = salary)) +
 ggplot(Salaries, aes(x = rank, y = salary)) + 
   geom_violin() + 
   labs(title = "Salary distribution by rank")
+
+
+#------------
+# Examples  |
+#------------
+# change the order the levels for the categorical variable "class" 
+mpg$manufacturer = factor(mpg$manufacturer, levels = c("audi", "chevrolet", "dodge", "ford", "honda", "hyundai", "jeep"
+                                                       , "land rover", "lincoln", "mercury", "subaru", "toyota", "volkswagen"))
+
+# create a summary dataset 
+plotdata <- mpg %>% group_by(manufacturer, year) %>%
+  summarize(n = n()) %>% 
+  mutate(pct = n/sum(n), lbl = scales::percent(pct)) 
+
+ggplot(plotdata, aes(x = factor(manufacturer, levels = c("audi", "chevrolet", "dodge", "ford", "honda", "hyundai", "jeep"
+                                                         , "land rover", "lincoln", "mercury", "subaru", "toyota", "volkswagen")), 
+                     y = pct, fill = factor(year, levels = c("1999", "2008"), labels = c("1999", "2008")))) +
+  
+  geom_bar(stat = "identity", position = "fill") + 
+  scale_y_continuous(breaks = seq(0, 1, .2), labels = percent) + 
+  geom_text(aes(label = lbl), size = 3, position = position_stack(vjust = 0.5)) + 
+  scale_fill_brewer(palette = "Accent") + 
+  labs(y = "Percent", fill = "Year", x = "Class", title = "Year sales by Manufaclurer") + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
 
 
 
